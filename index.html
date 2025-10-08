@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="estilos.css" />
+  </head>
+  <body>
+    <div id="agregacion">
+        <div id="inputButton">
+            <input type="text" id="nuevaTarea" placeholder="Ingresa una tarea" />
+            <button id="agregar">
+                Agregar Tarea
+            </button>
+        </div>
+        <p id="mensaje" style="margin-top: 16px; font-size: 16px;"></p>
+    </div>
+
+    <div id="divLista"> 
+      <h2>Lista de Tareas</h2>
+      <ul id="listaTareas" style="list-style:none; padding:0; margin:0;"></ul>
+    </div>
+
+    <script>
+      const tareas = [];
+
+      function agregarTarea(nombre) {
+        const tarea = { nombre, completada: false };
+        tareas.push(tarea);
+        actualizarLista();
+      }
+
+      function borrarTarea(index) {
+        if (tareas[index].completada) {
+          document.getElementById("mensaje").textContent = `Tarea borrada!`;
+          document.getElementById("mensaje").style.color = "red";
+          tareas.splice(index, 1);
+          actualizarLista();          
+        }
+      }
+
+      document.getElementById("agregar").addEventListener("click", () => {
+        const nuevaTarea = document.getElementById("nuevaTarea").value;
+        agregarTarea(nuevaTarea);
+        document.getElementById("nuevaTarea").value = "";
+        document.getElementById("mensaje").textContent = `Tarea: ${nuevaTarea} agregada!`;
+        document.getElementById("mensaje").style.color = "green";
+      });
+
+      function actualizarLista() {
+        // Actualiza la lista de tareas en el DOM
+        const lista = document.getElementById("listaTareas");
+        lista.innerHTML = "";
+        tareas.forEach((tarea, index) => {
+        // Crear elemento de lista
+          const li = document.createElement("li");
+          li.innerHTML = `<span style="text-decoration: ${tarea.completada ? "line-through" : "none"};">${tarea.nombre}</span>`;
+        
+        // Contenedor para los botones alineados a la derecha
+        const botonesDiv = document.createElement("div");
+        botonesDiv.style.float = "right";
+
+        // Botón para marcar como completada
+        const botonCompletar = document.createElement("button");
+        botonCompletar.style.marginLeft = "12px";
+        botonCompletar.textContent = tarea.completada ? "Desmarcar" : "Completar";
+        botonCompletar.onclick = () => marcarCompletada(index);
+        botonesDiv.appendChild(botonCompletar);
+
+        // Botón para borrar tarea
+        const botonBorrar = document.createElement("button");
+        botonBorrar.textContent = "X";
+        botonBorrar.style.marginLeft = "8px";
+        botonBorrar.onclick = () => borrarTarea(index);
+        botonesDiv.appendChild(botonBorrar);
+
+        li.appendChild(botonesDiv);
+        lista.appendChild(li);
+        });
+      }
+
+      function marcarCompletada(index) {
+        document.getElementById("mensaje").textContent = `Tarea: ${tareas[index].nombre} ${tareas[index].completada ? "vuelve a estar incompleta" : "completada"}!`;
+        document.getElementById("mensaje").style.color = tareas[index].completada ? "black" : "green";
+        tareas[index].completada = !tareas[index].completada;
+        actualizarLista();
+      }
+
+    </script>
+  </body>
+</html>
