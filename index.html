@@ -42,10 +42,15 @@
 
       document.getElementById("agregar").addEventListener("click", () => {
         const nuevaTarea = document.getElementById("nuevaTarea").value;
-        agregarTarea(nuevaTarea);
-        document.getElementById("nuevaTarea").value = "";
-        document.getElementById("mensaje").textContent = `Tarea: ${nuevaTarea} agregada!`;
-        document.getElementById("mensaje").style.color = "green";
+        if (nuevaTarea.trim() !== "") {
+          agregarTarea(nuevaTarea);
+          document.getElementById("nuevaTarea").value = "";
+          document.getElementById("mensaje").textContent = `Tarea: ${nuevaTarea} agregada!`;
+          document.getElementById("mensaje").style.color = "green";
+        } else {
+          document.getElementById("mensaje").textContent = "Por favor, ingresa una tarea válida.";
+          document.getElementById("mensaje").style.color = "red";
+        }
       });
 
       function actualizarLista() {
